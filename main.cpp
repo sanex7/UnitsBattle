@@ -1,8 +1,10 @@
-#include "Swordman.h"
 #include "Archer.h"
 #include "Mage.h"
+#include "Swordman.h"
 
 int main() {
+    using namespace SpecializedUnits;
+
     Swordman swordman("Arthur", 100, 20);
     Archer archer("Robin", 80, 5);
     Mage mage("Merlin", 60, 50);

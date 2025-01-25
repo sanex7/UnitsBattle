@@ -1,12 +1,22 @@
-#pragma once
+#ifndef SWORDMAN_H
+#define SWORDMAN_H
+
 #include "Unit.h"
 
-class Swordman : public Unit {
-private:
-    unsigned int power;
+namespace SpecializedUnits {
 
-public:
-    Swordman(const String<>& name, int HP, unsigned int power);
-    void Attack(Unit& target) override;
-    void Defense() override;
-};
+    using namespace BaseUnits;
+
+    class Swordman : public Unit {
+    private:
+        unsigned int power;
+
+    public:
+        Swordman(const String<>& name, int HP, unsigned int power);
+        void Attack(Unit& target) override;
+        void Defense() override;
+    };
+
+}
+
+#endif
