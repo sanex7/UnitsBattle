@@ -1,22 +1,42 @@
 #include "Unit.h"
+#include "ISerializable.h"
+#include <fstream>
 
 namespace BaseUnits {
 
-    Unit::Unit(const String<>& name, int HP) : name(name), HP(HP) {}
-    Unit::Unit(int HP) : HP(HP) {}
-    Unit::Unit(const String<>& name) : name(name) {}
+    std::ostream& Unit::Serialize(std::ostream& output) {
+        output << name << "\n" << HP << "\n";
+        return output;
+    }
 
-    void Unit::TakeDamage(int value) {
-        if (IsDefense) {
-            value /= 2;
+    std::istream& Unit::Deserialize(std::istream& input) {
+        std::getline(input, name);
+        input >> HP;
+        input.ignore();
+        return input;
+    }
+
+    void Unit::Serialize(const std::string& path) {
+        std::ofstream file(path);
+        if (file.is_open()) {
+            Serialize(file);
+            file.close();
         }
-        HP -= value;
-        std::cout << name << " takes " << value << " damage. HP left: " << HP << "\n";
     }
 
-    std::ostream& operator<<(std::ostream& os, const Unit& unit) {
-        os << "Unit Name: " << unit.name << ", HP: " << unit.HP;
-        return os;
+    void Unit::Deserialize(const std::string& path) {
+        std::ifstream file(path);
+        if (file.is_open()) {
+            Deserialize(file);
+            file.close();
+        }
     }
 
+    void Unit::Serialize() {
+        std::cout << "Serializing Unit: " << name << ", HP: " << HP << std::endl;
+    }
+
+    void Unit::Deserialize() {
+        std::cout << "Deserializing Unit: " << name << ", HP: " << HP << std::endl;
+    }
 }
