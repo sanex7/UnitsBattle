@@ -1,23 +1,43 @@
 #include "Mage.h"
+#include "ISerializable.h"
+#include <fstream>
 
 namespace SpecializedUnits {
 
-    Mage::Mage(const String<>& name, int HP, unsigned int mana)
-        : Unit(name, HP), mana(mana) {}
+    std::ostream& Mage::Serialize(std::ostream& output) {
+        Unit::Serialize(output);
+        output << mana << "\n";
+        return output;
+    }
 
-    void Mage::Attack(Unit& target) {
-        if (mana >= 10) {
-            mana -= 10;
-            std::cout << name << " casts a spell. Mana left: " << mana << "\n";
-        }
-        else {
-            std::cout << name << " is out of mana!\n";
+    std::istream& Mage::Deserialize(std::istream& input) {
+        Unit::Deserialize(input);
+        input >> mana;
+        input.ignore();
+        return input;
+    }
+
+    void Mage::Serialize(const std::string& path) {
+        std::ofstream file(path);
+        if (file.is_open()) {
+            Serialize(file);
+            file.close();
         }
     }
 
-    void Mage::Defense() {
-        IsDefense = true;
-        std::cout << name << " creates a magical shield.\n";
+    void Mage::Deserialize(const std::string& path) {
+        std::ifstream file(path);
+        if (file.is_open()) {
+            Deserialize(file);
+            file.close();
+        }
     }
 
+    void Mage::Serialize() {
+        std::cout << "Serializing Mage: " << name << ", HP: " << HP << ", Mana: " << mana << std::endl;
+    }
+
+    void Mage::Deserialize() {
+        std::cout << "Deserializing Mage: " << name << ", HP: " << HP << ", Mana: " << mana << std::endl;
+    }
 }
